@@ -1,0 +1,57 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: gestor-db
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin_pass
+      - POSTGRES_DB=gestor_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ../database/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: ../api
+      dockerfile: ./docker/Dockerfile
+    container_name: gestor-api
+    ports:
+      - "3000:3000"
+    environment:
+      # No NestJS, você usará essa URL para conectar via TypeORM ou Prisma
+      - DATABASE_URL=postgresql://admin:admin_pass@db:5432/gestor_db
+    volumes:
+      - ../api:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  app:
+    build:
+      context: ../app
+      dockerfile: ./docker/Dockerfile
+    container_name: gestor-app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../app:/app
+      - /app/node_modules
+    stdin_open: true
+    depends_on:
+      - api
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pg_data:
