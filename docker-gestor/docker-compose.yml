@@ -20,11 +20,12 @@ services:
       context: ../api
       dockerfile: ./docker/Dockerfile
     container_name: gestoq-api
+    command: npm run start:dev -- --outDir /tmp/dist
     ports:
       - "3000:3000"
     environment:
-      # No NestJS, você usará essa URL para conectar via TypeORM ou Prisma
       - DATABASE_URL=postgresql://admin:PSQL@1234567890@db:5432/gestoq_db
+      
     volumes:
       - ../api:/app
       - /app/node_modules
