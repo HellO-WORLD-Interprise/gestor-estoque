@@ -1,14 +1,14 @@
 services:
   db:
     image: postgres:15-alpine
-    container_name: gestor-db
+    container_name: gestoq-db
     restart: always
     environment:
       - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin_pass
-      - POSTGRES_DB=gestor_db
+      - POSTGRES_PASSWORD=PSQL@1234567890
+      - POSTGRES_DB=gestoq_db
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ../database/init-db.sql:/docker-entrypoint-initdb.d/init.sql
@@ -19,12 +19,12 @@ services:
     build:
       context: ../api
       dockerfile: ./docker/Dockerfile
-    container_name: gestor-api
+    container_name: gestoq-api
     ports:
       - "3000:3000"
     environment:
       # No NestJS, você usará essa URL para conectar via TypeORM ou Prisma
-      - DATABASE_URL=postgresql://admin:admin_pass@db:5432/gestor_db
+      - DATABASE_URL=postgresql://admin:PSQL@1234567890@db:5432/gestoq_db
     volumes:
       - ../api:/app
       - /app/node_modules
@@ -37,7 +37,7 @@ services:
     build:
       context: ../app
       dockerfile: ./docker/Dockerfile
-    container_name: gestor-app
+    container_name: gestoq-app
     ports:
       - "5173:5173"
     volumes:
