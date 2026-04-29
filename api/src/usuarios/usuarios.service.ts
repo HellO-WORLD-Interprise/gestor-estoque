@@ -37,6 +37,12 @@ export class UsuariosService {
     });
   }
 
+  async findByEmail(email: string) {
+    return await this.usuarioRepository.findOne({
+      where: { email, is_ativo: true },
+    });
+}
+
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
     await this.findOne(id);
 

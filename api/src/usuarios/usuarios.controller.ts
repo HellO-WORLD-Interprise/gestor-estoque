@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
@@ -6,6 +7,7 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('usuarios')
 export class UsuariosController {
+
   constructor(private readonly usuariosService: UsuariosService) {}
 
   @Post()
@@ -14,6 +16,7 @@ export class UsuariosController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll() {
     return this.usuariosService.findAll();
   }
