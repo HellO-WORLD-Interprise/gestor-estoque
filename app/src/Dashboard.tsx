@@ -3,9 +3,10 @@ import { LogOut } from 'lucide-react';
 
 interface DashboardProps {
   onLogout: () => void;
+  onNavigate: (screen: string) => void; // 👈 Adicionado aqui
 }
 
-export default function Dashboard({ onLogout }: DashboardProps) {
+export default function Dashboard({ onLogout, onNavigate }: DashboardProps) {
   const cards = [
     { title: 'Diversidade de Itens', value: 0 },
     { title: 'Inventário Total', value: 0 },
@@ -15,7 +16,7 @@ export default function Dashboard({ onLogout }: DashboardProps) {
 
   return (
     <div className="flex bg-[#020617] min-h-screen text-white overflow-x-hidden">
-      <Sidebar />
+      <Sidebar onNavigate={onNavigate} /> {/* 👈 Passa a navegação para a Sidebar */}
       <div className="flex-1 flex flex-col">
         <header className="h-16 bg-gradient-to-r from-[#071d45] to-[#124285] px-8 flex items-center justify-between border-b border-white/5">
           <div className="w-1/3"></div>

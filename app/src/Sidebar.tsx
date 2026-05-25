@@ -1,16 +1,20 @@
 import { useState } from 'react';
 import { Home, BarChart3, DollarSign, Package, ClipboardList, Settings, ChevronLeft, ChevronsRight } from 'lucide-react';
 
-export default function Sidebar() {
+interface SidebarProps {
+  onNavigate: (screen: string) => void; // 👈 Nova propriedade para navegar
+}
+
+export default function Sidebar({ onNavigate }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(true);
 
   const menuItems = [
-    { name: 'Home', icon: Home },
-    { name: 'Dashboard', icon: BarChart3 },
-    { name: 'Finanças', icon: DollarSign },
-    { name: 'Produtos', icon: Package },
-    { name: 'Estoque', icon: ClipboardList },
-    { name: 'Configurações', icon: Settings },
+    { name: 'Home', icon: Home, id: 'home' },
+    { name: 'Dashboard', icon: BarChart3, id: 'dashboard' },
+    { name: 'Finanças', icon: DollarSign, id: 'financas' },
+    { name: 'Produtos', icon: Package, id: 'produtos' }, // 👈 ID para identificar o clique
+    { name: 'Estoque', icon: ClipboardList, id: 'estoque' },
+    { name: 'Configurações', icon: Settings, id: 'configuracoes' },
   ];
 
   return (
@@ -22,7 +26,11 @@ export default function Sidebar() {
       </div>
       <nav className="flex-1 py-6 space-y-2 px-3">
         {menuItems.map((item, index) => (
-          <button key={index} className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition-all group">
+          <button 
+            key={index} 
+            onClick={() => onNavigate(item.id)} // 👈 Quando clica, avisa o App.tsx qual ID foi clicado
+            className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+          >
             <div className="p-2 bg-[#051a3a]/40 rounded-full group-hover:bg-[#07214a] transition-all text-[#2af5ff]">
               <item.icon size={20} />
             </div>
