@@ -11,7 +11,7 @@ export default function Header({ onLogout }: HeaderProps ) {
             <h2 className="text-lg font-medium text-slate-200">Olá, {localStorage.getItem('user_name')}</h2>
             <span className="text-md text-slate-300 capitalize">
                 { hoje.toLocaleDateString('pt-br', { weekday: 'long'}) }
-                - 
+                &nbsp; - &nbsp; 
                 {hoje.toLocaleDateString('pt-br')}
             </span>
             <button onClick={onLogout} className="text-slate-300 hover:text-red-400 transition-colors cursor-pointer">

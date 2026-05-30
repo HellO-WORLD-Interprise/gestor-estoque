@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Dashboard from './Dashboard';
 import CadastrarProdutos from './CadastrarProdutos';
 import ListarProdutos from './ListarProdutos';
+import CadastrarUsuario from './CadastrarUsuario';
 const API_BASE_URL = 'http://127.0.0.1:3000';
 
 interface LoginResponse {
@@ -34,13 +35,13 @@ export default function App() {
         }),
       });
 
-      const data: LoginResponse = await response.json();
+      const dados: LoginResponse = await response.json();
 
-      if (data.nome && data.access_token) {
+      if (dados.nome && dados.access_token) {
         setIsLoggedIn(true);
 
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('user_name', data.nome);
+        localStorage.setItem('access_token', dados.access_token);
+        localStorage.setItem('user_name', dados.nome);
       } else {
         setError('Usuário ou senha incorretos');
       }
@@ -72,12 +73,10 @@ export default function App() {
     }
   }
 
-  // 2. SE O USUÁRIO NÃO ESTIVER LOGADO: Verifica se ele clicou para ir para a tela de Cadastro
-  if (currentScreen === 'Cadastro') {
-    return <Cadastro onBackToLogin={() => setCurrentScreen('dashboard')} />;
+  if (currentScreen === 'cadastrarusuario') {
+    return <CadastrarUsuario onBackToLogin={() => setCurrentScreen('dashboard')} />;
   }
 
-  // 3. CASO CONTRÁRIO: Mostra a tela de Login padrão
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-[#0c2a6b] to-[#041130] p-4">
       <div className="w-full max-w-md rounded-2xl bg-linear-to-b from-[#1872cc] to-[#0b6494] p-8 shadow-2xl md:p-12">
@@ -111,14 +110,23 @@ export default function App() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 mt-2 rounded-xl text-white font-medium text-lg bg-[#0a2f7c] hover:bg-[#082563] shadow-md cursor-pointer disabled:opacity-50"
+            className="w-full py-3.5 mt-5 rounded-xl text-white font-medium text-lg bg-[#0a2f7c] hover:bg-[#082563] shadow-md cursor-pointer disabled:opacity-50"
           >
             {loading ? 'Carregando...' : 'Entrar'}
           </button>
         </form>
-        <div className="flex justify-between items-center mt-8 text-white/90 text-md">
-          <a href="#esquecer" className="hover:underline">Esqueceu a senha?</a>
-          <a href="#criar" className="hover:underline">Criar conta</a>
+
+        <div className="flex justify-center gap-2 items-center mt-8 text-md">
+          <p className="text-white/75">É novo por aqui?</p>
+          <button  
+            className="cursor-pointer text-white/80  hover:underline hover:text-white hover:font-medium"
+            onClick={() => {
+              setCurrentScreen('cadastrarusuario');
+            }}
+          >
+            Criar conta
+          </button>
+
         </div>
       </div>
     </div>
