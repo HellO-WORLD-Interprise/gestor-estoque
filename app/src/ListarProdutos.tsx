@@ -1,15 +1,28 @@
+import { useState } from 'react';
 import Sidebar from './Sidebar';
-import { LogOut, Edit2, Trash2 } from 'lucide-react';
+import Header from './Header';
+import Navbar from './Navbar';
+import { Edit2, Trash2 } from 'lucide-react';
 
-interface EstoqueProps {
+interface ProdutosProps {
   onLogout: () => void;
   onNavigate: (screen: string) => void;
 }
 
-export default function Estoque({ onLogout, onNavigate }: EstoqueProps) {
-  // Dados mockados para exemplo visual da tabela
-  //  DEIXE ASSIM:
+export default function ListarProdutos({ onLogout, onNavigate }: ProdutosProps) {
+  const [activeScreen, setActiveScreen] = useState<string>('listarprodutos');
+  /*const [userClickedEdit, setUserClickedEdit] = useState<boolean>(false);
+*/
 const produtos: any[] = [];
+
+  const handleActiveWindow = (screen: string): boolean => {
+    return activeScreen === screen;
+  };
+
+  const handleNavigation = (screen: string) => {
+    setActiveScreen(screen);
+    onNavigate(screen);
+  };
 
   return (
     <div className="flex bg-[#020617] min-h-screen text-white overflow-x-hidden">
@@ -18,20 +31,16 @@ const produtos: any[] = [];
 
       {/* Conteúdo Principal */}
       <div className="flex-1 flex flex-col">
-        {/* Barra Superior */}
-        <header className="h-16 bg-gradient-to-r from-[#071d45] to-[#124285] px-8 flex items-center justify-between border-b border-white/5">
-          <div className="w-1/3"></div>
-          <h2 className="text-lg font-medium text-slate-200">Olá, usuário</h2>
-          <div className="flex items-center gap-6">
-            <span className="text-sm text-slate-300">Segunda-Feira - 01/01/2025</span>
-            <button onClick={onLogout} className="text-slate-300 hover:text-red-400 transition-colors">
-              <LogOut size={22} />
-            </button>
-          </div>
-        </header>
+        
+        <Header onLogout={onLogout} />
 
-        {/* Tabela de Produtos */}
-        <main className="flex-1 p-8 md:p-12 max-w-7xl w-full mx-auto space-y-8">
+        <Navbar 
+          pageName="Produtos" 
+          onNavigate={handleNavigation} 
+          activeWindow={handleActiveWindow}
+          /* showEditButton={userClickedEdit} */
+        />
+        <main className="flex-1 px-8 py-4 md:p-12 max-w-7xl w-full mx-auto space-y-8">
           <h1 className="text-3xl font-semibold tracking-wide text-[#aee2ff]">
             Listar Produtos
           </h1>
@@ -40,7 +49,7 @@ const produtos: any[] = [];
             <table className="w-full text-left border-collapse">
               {/* Cabeçalho igual ao da foto */}
               <thead>
-                <tr className="bg-gradient-to-r from-[#091f52] to-[#124183] text-slate-200 font-medium text-sm border-b border-white/10">
+                <tr className="bg-linear-to-r from-[#091f52] to-[#124183] text-slate-200 font-medium text-sm border-b border-white/10">
                   <th className="px-6 py-4">ID</th>
                   <th className="px-6 py-4">Nome</th>
                   <th className="px-6 py-4">Lote</th>
@@ -53,7 +62,7 @@ const produtos: any[] = [];
               {/* Corpo da Tabela */}
               <tbody className="divide-y divide-white/5 text-sm text-slate-300">
                 {produtos.map((prod) => (
-                  <tr key={prod.id} className="hover:bg-white/[0.02] transition-colors">
+                  <tr key={prod.id} className="hover:bg-white/2 transition-colors">
                     <td className="px-6 py-4 font-mono text-[#2af5ff]">{prod.id}</td>
                     <td className="px-6 py-4 font-medium text-white">{prod.nome}</td>
                     <td className="px-6 py-4">{prod.lote}</td>

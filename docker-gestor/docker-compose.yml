@@ -5,10 +5,10 @@ services:
     restart: always
     environment:
       - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=PSQL@1234567890
+      - POSTGRES_PASSWORD=PSQL1234567890
       - POSTGRES_DB=gestoq_db
     ports:
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ../database/init-db.sql:/docker-entrypoint-initdb.d/init.sql
@@ -22,9 +22,9 @@ services:
     container_name: gestoq-api
     command: npm run start:dev -- --outDir /tmp/dist
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     environment:
-      - DATABASE_URL=postgresql://admin:PSQL@1234567890@db:5432/gestoq_db
+      - DATABASE_URL=postgresql://admin:PSQL1234567890@db:5432/gestoq_db
       
     volumes:
       - ../api:/app
@@ -40,11 +40,12 @@ services:
       dockerfile: ./docker/Dockerfile
     container_name: gestoq-app
     ports:
-      - "5173:5173"
+      - "127.0.0.1:5173:5173"
     volumes:
       - ../app:/app
       - /app/node_modules
     stdin_open: true
+    tty: true
     depends_on:
       - api
     networks:

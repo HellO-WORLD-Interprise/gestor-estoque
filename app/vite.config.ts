@@ -8,4 +8,16 @@ export default defineConfig({
     react(),
     tailwindcss(), // 👈 Ativa o Tailwind v4 no processo de build do Vite
   ],
-})
+  server: {
+    host: true,
+    port: 5173,
+    strictPort: true,
+    hmr: {
+      clientPort: 5173,
+    },
+    watch: {
+      usePolling: true,
+      interval: 100,
+    },
+  },
+});

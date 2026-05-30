@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Home, BarChart3, DollarSign, Package, ClipboardList, Settings, ChevronLeft, ChevronsRight } from 'lucide-react';
+import { Home, Package, ClipboardList, Settings, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 interface SidebarProps {
   onNavigate: (screen: string) => void; // 👈 Nova propriedade para navegar
@@ -10,31 +10,32 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
 
   const menuItems = [
     { name: 'Home', icon: Home, id: 'home' },
-    { name: 'Dashboard', icon: BarChart3, id: 'dashboard' },
-    { name: 'Finanças', icon: DollarSign, id: 'financas' },
-    { name: 'Produtos', icon: Package, id: 'produtos' }, // 👈 ID para identificar o clique
-    { name: 'Estoque', icon: ClipboardList, id: 'estoque' },
+    { name: 'Produtos', icon: Package, id: 'listarprodutos' },
+    { name: 'Estoque', icon: ClipboardList, id: 'listarestoque' },
     { name: 'Configurações', icon: Settings, id: 'configuracoes' },
   ];
 
   return (
-    <div className={`min-h-screen bg-gradient-to-b from-[#1473cd] to-[#11a2bc] text-white flex flex-col transition-all duration-300 ${isOpen ? 'w-64' : 'w-20'}`}>
-      <div className="p-4 flex items-center bg-[#07214a]/20 h-16 border-b border-white/10">
-        <button onClick={() => setIsOpen(!isOpen)} className="text-[#2af5ff] hover:text-white transition-colors">
-          {isOpen ? <ChevronLeft size={28} /> : <ChevronsRight size={28} />}
+    <div className={`min-h-screen bg-linear-to-b from-[#1473cd] to-[#11a2bc] text-white flex flex-col transition-all duration-300 ${isOpen ? 'w-64' : 'w-20'}`}>
+      <div className="relative flex items-center bg-[#071d45] h-16 border-b border-white/10">
+        <button onClick={() => setIsOpen(!isOpen)} className="absolute left-6 top-1/2 -translate-y-1/2 text-[#2af5ff] hover:text-white transition-colors cursor-pointer">
+          {isOpen ? <ChevronsLeft size={35} /> : <ChevronsRight size={35} />}
         </button>
       </div>
-      <nav className="flex-1 py-6 space-y-2 px-3">
+
+      <nav className={`flex flex-col flex-1 space-y-9 py-6 ${ isOpen ? 'px-3' : 'items-center' }`}>
         {menuItems.map((item, index) => (
           <button 
             key={index} 
-            onClick={() => onNavigate(item.id)} // 👈 Quando clica, avisa o App.tsx qual ID foi clicado
-            className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/10 transition-all group"
+            onClick={() => onNavigate(item.id)}
+            className="space-x-4 flex items-center p-2 rounded-xl hover:bg-white/10 transition-all group cursor-pointer"
           >
-            <div className="p-2 bg-[#051a3a]/40 rounded-full group-hover:bg-[#07214a] transition-all text-[#2af5ff]">
-              <item.icon size={20} />
+            <div className="p-2 bg-[#051a3a] rounded-full group-hover:bg-[#07214a]/70 transition-all text-[#2af5ff]">
+              <item.icon size={26} />
             </div>
+
             {isOpen && <span className="text-base font-medium tracking-wide">{item.name}</span>}
+
           </button>
         ))}
       </nav>

@@ -20,3 +20,21 @@ CREATE TABLE usuarios (
 INSERT INTO cargos (descricao) VALUES ('Administrador');
 INSERT INTO cargos (descricao) VALUES ('Operador');
 INSERT INTO cargos (descricao) VALUES ('Gerente');
+
+CREATE TABLE categoria_produto (
+    id_categoria SERIAL PRIMARY KEY,
+    descricao TEXT NOT NULL
+);
+
+CREATE TABLE produtos (
+    id_produto SERIAL PRIMARY KEY,
+    nome TEXT NOT NULL,
+    preco DECIMAL (10, 2) NOT NULL,
+    id_categoria INT,
+    descricao TEXT NOT NULL,
+    is_ativo BOOLEAN DEFAULT TRUE,
+    CONSTRAINT fk_categoria_produtos
+        FOREIGN KEY (id_categoria)
+        REFERENCES categoria_produto(id_categoria)
+        ON DELETE SET NULL
+);

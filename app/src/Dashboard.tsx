@@ -1,5 +1,6 @@
 import Sidebar from './Sidebar';
-import { LogOut } from 'lucide-react';
+import Header from './Header';
+import { PenBoxIcon, Trash2Icon } from 'lucide-react';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -18,34 +19,79 @@ export default function Dashboard({ onLogout, onNavigate }: DashboardProps) {
     <div className="flex bg-[#020617] min-h-screen text-white overflow-x-hidden">
       <Sidebar onNavigate={onNavigate} /> {/* 👈 Passa a navegação para a Sidebar */}
       <div className="flex-1 flex flex-col">
-        <header className="h-16 bg-gradient-to-r from-[#071d45] to-[#124285] px-8 flex items-center justify-between border-b border-white/5">
-          <div className="w-1/3"></div>
-          <h2 className="text-lg font-medium text-slate-200">Olá, usuário</h2>
-          <div className="flex items-center gap-6">
-            <span className="text-sm text-slate-300">Segunda-Feira - 01/01/2025</span>
-            <button onClick={onLogout} className="text-slate-300 hover:text-red-400 transition-colors">
-              <LogOut size={22} />
-            </button>
-          </div>
-        </header>
+        
+        <Header onLogout={onLogout} />
 
         <main className="flex-1 p-8 md:p-12 space-y-12 max-w-7xl w-full mx-auto">
           <h1 className="text-3xl font-semibold tracking-wide text-slate-100">Visão Geral</h1>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
             {cards.map((card, index) => (
-              <div key={index} className="bg-gradient-to-b from-[#0a2558] to-[#0d3880] p-6 rounded-lg shadow-lg border border-white/5 text-center flex flex-col justify-between h-40">
+              <div key={index} className="bg-linear-to-b from-[#0a2558] to-[#0d3880] p-6 rounded-lg shadow-lg border border-white/5 text-center flex flex-col justify-between h-40">
                 <h3 className="text-sm text-slate-300 font-medium tracking-wide">{card.title}</h3>
                 <span className="text-5xl font-bold text-white mb-2">{card.value}</span>
               </div>
             ))}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-gradient-to-r from-[#06183a] to-[#0e3b87] h-14 rounded-md flex items-center justify-center border border-white/5 shadow-md text-sm font-medium tracking-wider text-slate-300">
-              Itens acabando
-            </div>
-            <div className="bg-gradient-to-r from-[#06183a] to-[#0e3b87] h-14 rounded-md flex items-center justify-center border border-white/5 shadow-md text-sm font-medium tracking-wider text-slate-300">
-              Itens mais vendidos
-            </div>
+
+          <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-8">
+
+            <table className="w-full border-collapse border border-white/5 rounded-lg overflow-hidden shadow-md">
+
+              <thead>
+                <tr className="bg-linear-to-r from-[#06183a] to-[#0e3b87]">
+                  <th colSpan={3} className="text-sm font-medium tracking-wider text-slate-300 border border-white/5 p-3">
+                    Itens acabando
+                  </th>
+                </tr>
+
+                <tr className="bg-linear-to-r from-[#06183a] to-[#0e3b87]">
+                  <th style={{ width: '15%' }} className="text-sm font-medium tracking-wider text-slate-300 border border-white/5 p-3 text-left">Id</th>
+                  <th style={{ width: '65%' }} className="text-sm font-medium tracking-wider text-slate-300 border border-white/5 p-3 text-left">Nome</th>
+                  <th style={{ width: '20%' }} className="text-sm font-medium tracking-wider text-slate-300 border border-white/5 p-3">Ações</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr className="bg-slate-300 text-blue-950">
+                  <td className="text-sm tracking-wider p-3 border border-black/5">1</td>
+                  <td className="text-sm tracking-wider p-3 border border-black/5">Produto 1</td>
+                  <td className="text-sm tracking-wider p-3 border border-black/5">
+                    <div className="flex justify-center space-x-5">
+                      <a href="#"><PenBoxIcon size={20}/></a>
+                      <a href="#"><Trash2Icon size={20}/></a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+
+            <table className="w-full border-collapse border border-white/5 rounded-lg overflow-hidden shadow-md">
+              <thead>
+                <tr className="bg-linear-to-r from-[#06183a] to-[#0e3b87]">
+                  <th colSpan={3} className="text-sm font-medium tracking-wider text-slate-300 border border-white/5 p-3">
+                    Itens mais vendidos
+                  </th>
+                </tr>
+                <tr className="bg-linear-to-r from-[#06183a] to-[#0e3b87]">
+                  <th style={{ width: '15%' }} className="text-sm font-medium tracking-wider text-slate-300 border border-white/5 p-3 text-left">Id</th>
+                  <th style={{ width: '60%' }} className="text-sm font-medium tracking-wider text-slate-300 border border-white/5 p-3 text-left">Nome</th>
+                  <th style={{ width: '25%' }} className="text-sm font-medium tracking-wider text-slate-300 border border-white/5 p-3 text-left">Ações</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr className="bg-slate-300 text-blue-950">
+                  <td className="text-sm tracking-wider p-3 border border-black/5">1</td>
+                  <td className="text-sm tracking-wider p-3 border border-black/5">Produto 1</td>
+                  <td className="text-sm tracking-wider p-3 border border-black/5">a</td>
+                </tr>
+              </tbody>
+
+            </table>
+            
           </div>
         </main>
       </div>
