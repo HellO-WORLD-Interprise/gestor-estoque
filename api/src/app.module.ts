@@ -2,6 +2,8 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { AuthModule } from './auth/auth.module';
+import { ProdutosModule } from './produtos/produtos.module';
+import { CategoriaProdutoModule } from './categoria-produto/categoria-produto.module';
 import "dotenv/config";
 
 @Module({
@@ -14,6 +16,8 @@ import "dotenv/config";
     }),
     UsuariosModule,
     AuthModule,
+    ProdutosModule,
+    CategoriaProdutoModule,
   ],
   controllers: [],
   providers: [],

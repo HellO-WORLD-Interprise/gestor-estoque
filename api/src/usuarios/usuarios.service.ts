@@ -31,20 +31,36 @@ export class UsuariosService {
   }
 
   async findOne(id: number) {
-    return await this.usuarioRepository.findOneBy({ 
+    const usuario = await this.usuarioRepository.findOneBy({ 
       id_usuario: id, 
       is_ativo: true 
     });
+
+    if (!usuario) {
+      throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
+    }
+
+    return usuario;
   }
 
   async findByEmail(email: string) {
-    return await this.usuarioRepository.findOne({
+    const usuario = await this.usuarioRepository.findOne({
       where: { email, is_ativo: true },
     });
-}
+
+    if (!usuario) {
+      throw new NotFoundException(`Usuário com email ${email} não encontrado`);
+    }
+
+    return usuario;
+  }
 
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    await this.findOne(id);
+    const usuario = await this.findOne(id);
+
+    if (!usuario) {
+      throw new NotFoundException(`Usuário com id ${id} não encontrado`);
+    }
 
     if (updateUsuarioDto.senha_hash) {
       updateUsuarioDto.senha_hash = await bcrypt.hash(
