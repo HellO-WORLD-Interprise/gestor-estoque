@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Dashboard from './Dashboard';
 import CadastrarProduto from './CadastrarProduto';
-import Estoque from './Estoque'; // 👈 Importando o novo componente
+import Estoque from './Estoque'; 
+import Cadastro from './Cadastro'; 
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -17,19 +18,25 @@ export default function App() {
     setCurrentScreen('dashboard'); 
   };
 
-  // Roteamento condicional de telas internas do app
+  // 1. SE O USUÁRIO ESTIVER LOGADO: Controla as telas internas do sistema
   if (isLoggedIn) {
     if (currentScreen === 'produtos') {
       return <CadastrarProduto onLogout={handleLogout} onNavigate={setCurrentScreen} />;
     }
     
     if (currentScreen === 'estoque') {
-      return <Estoque onLogout={handleLogout} onNavigate={setCurrentScreen} />; // 👈 Adicionado aqui
+      return <Estoque onLogout={handleLogout} onNavigate={setCurrentScreen} />; 
     }
     
     return <Dashboard onLogout={handleLogout} onNavigate={setCurrentScreen} />;
   }
 
+  // 2. SE O USUÁRIO NÃO ESTIVER LOGADO: Verifica se ele clicou para ir para a tela de Cadastro
+  if (currentScreen === 'Cadastro') {
+    return <Cadastro onBackToLogin={() => setCurrentScreen('dashboard')} />;
+  }
+
+  // 3. CASO CONTRÁRIO: Mostra a tela de Login padrão
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0c2a6b] to-[#041130] p-4">
       <div className="w-full max-w-md rounded-2xl bg-gradient-to-b from-[#1872cc] to-[#0b6494] p-8 shadow-2xl md:p-12">
@@ -45,9 +52,21 @@ export default function App() {
             Entrar
           </button>
         </form>
+        
         <div className="flex justify-between items-center mt-8 text-white/90 text-sm">
-          <a href="#esquecer" className="hover:underline">Esqueceu a senha?</a>
-          <a href="#criar" className="hover:underline">Criar conta</a>
+          <a href="#esquecer" className="hover:underline">
+            Esqueceu a senha?
+          </a>
+          <a 
+            href="#criar" 
+            onClick={(e) => {
+              e.preventDefault(); 
+              setCurrentScreen('Cadastro'); // Agora esse estado vai acionar o bloco correto ali em cima!
+            }} 
+            className="hover:underline"
+          >
+            Criar conta
+          </a>
         </div>
       </div>
     </div>
