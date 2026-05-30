@@ -38,3 +38,14 @@ CREATE TABLE produtos (
         REFERENCES categoria_produto(id_categoria)
         ON DELETE SET NULL
 );
+
+CREATE OR REPLACE VIEW vw_listagem_completa AS
+SELECT 
+    pr.id_produto,
+    pr.nome, 
+    pr.preco, 
+    pr.descricao, 
+    ct.descricao AS categoria, 
+    pr.is_ativo 
+FROM produtos pr
+JOIN categoria_produto ct ON ct.id_categoria = pr.id_categoria;

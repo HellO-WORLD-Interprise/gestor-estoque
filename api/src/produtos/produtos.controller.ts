@@ -21,6 +21,12 @@ export class ProdutosController {
     return this.produtosService.findAll();
   }
 
+  @Get('listagem/completa')
+  @UseGuards(JwtAuthGuard)
+  findByVwListagemCompleta() {
+    return this.produtosService.findByVwListagemCompleta();
+  }
+
   @Get('categoria/:id')
   @UseGuards(JwtAuthGuard)
   findByCategoria(@Param('id') id: string) {

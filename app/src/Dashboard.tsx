@@ -59,8 +59,14 @@ export default function Dashboard({ onLogout, onNavigate }: DashboardProps) {
                   <td className="text-sm tracking-wider p-3 border border-black/5">Produto 1</td>
                   <td className="text-sm tracking-wider p-3 border border-black/5">
                     <div className="flex justify-center space-x-5">
-                      <a href="#"><PenBoxIcon size={20}/></a>
-                      <a href="#"><Trash2Icon size={20}/></a>
+                      <button 
+                          className="hover:text-[#03c0ca] transition-colors cursor-pointer"
+                        >
+                          <PenBoxIcon size={20} />
+                        </button>
+                        <button className="hover:text-red-400 transition-colors cursor-pointer">
+                          <Trash2Icon size={20} />
+                        </button>
                     </div>
                   </td>
                 </tr>
@@ -86,7 +92,18 @@ export default function Dashboard({ onLogout, onNavigate }: DashboardProps) {
                 <tr className="bg-slate-300 text-blue-950">
                   <td className="text-sm tracking-wider p-3 border border-black/5">1</td>
                   <td className="text-sm tracking-wider p-3 border border-black/5">Produto 1</td>
-                  <td className="text-sm tracking-wider p-3 border border-black/5">a</td>
+                  <td className="text-sm tracking-wider p-3 border border-black/5">
+                    <div className="flex justify-center space-x-5">
+                      <button 
+                          className="hover:text-[#03c0ca] transition-colors cursor-pointer"
+                        >
+                          <PenBoxIcon size={20} />
+                        </button>
+                        <button className="hover:text-red-400 transition-colors cursor-pointer">
+                          <Trash2Icon size={20} />
+                        </button>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
 

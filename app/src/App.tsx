@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Dashboard from './Dashboard';
 import CadastrarProdutos from './CadastrarProdutos';
 import ListarProdutos from './ListarProdutos';
+import AlterarProdutos from './AlterarProdutos';
 import CadastrarUsuario from './CadastrarUsuario';
 const API_BASE_URL = 'http://127.0.0.1:3000';
 
@@ -17,6 +18,7 @@ export default function App() {
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [produtoIdSelecionado, setProdutoIdSelecionado] = useState<number | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,8 +67,14 @@ export default function App() {
       case 'cadastrarprodutos':
         return <CadastrarProdutos onLogout={handleLogout} onNavigate={setCurrentScreen} />;
 
+      case 'alterarprodutos': 
+        return <AlterarProdutos onLogout={handleLogout} onNavigate={setCurrentScreen} produtoId={produtoIdSelecionado} />;
+
       case 'listarprodutos': 
-        return <ListarProdutos onLogout={handleLogout} onNavigate={setCurrentScreen} />;
+        return <ListarProdutos onLogout={handleLogout} onNavigate={setCurrentScreen} onEditProduto={(id) => {
+          setProdutoIdSelecionado(id);
+          setCurrentScreen('alterarprodutos');
+        }} />;
       
       default: 
         return <Dashboard onLogout={handleLogout} onNavigate={setCurrentScreen} />;

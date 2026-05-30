@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Produto } from './entities/produto.entity';
+import { VwListagemCompleta } from './entities/vw-listagem-completa.view';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
 
@@ -10,7 +11,9 @@ export class ProdutosService {
 
   constructor(
     @InjectRepository(Produto)
-    private readonly produtoRepository: Repository<Produto>
+    private readonly produtoRepository: Repository<Produto>,
+    @InjectRepository(VwListagemCompleta)
+    private readonly vwListagemRepository: Repository<VwListagemCompleta>
   ) {}
 
   async create(createProdutoDto: CreateProdutoDto) {
@@ -20,6 +23,12 @@ export class ProdutosService {
 
   async findAll() {
     return await this.produtoRepository.find({
+      where: { is_ativo: true }
+    });
+  }
+
+  async findByVwListagemCompleta() {
+    return await this.vwListagemRepository.find({
       where: { is_ativo: true }
     });
   }
