@@ -72,6 +72,12 @@ export default function App() {
     }
   }
 
+  // 2. SE O USUÁRIO NÃO ESTIVER LOGADO: Verifica se ele clicou para ir para a tela de Cadastro
+  if (currentScreen === 'Cadastro') {
+    return <Cadastro onBackToLogin={() => setCurrentScreen('dashboard')} />;
+  }
+
+  // 3. CASO CONTRÁRIO: Mostra a tela de Login padrão
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-[#0c2a6b] to-[#041130] p-4">
       <div className="w-full max-w-md rounded-2xl bg-linear-to-b from-[#1872cc] to-[#0b6494] p-8 shadow-2xl md:p-12">
