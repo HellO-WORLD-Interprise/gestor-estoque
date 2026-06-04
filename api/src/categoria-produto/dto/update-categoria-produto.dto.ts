@@ -1,7 +1,15 @@
-import { IsString, IsOptional } from "class-validator";
+import { IsString, IsNumber, IsOptional } from "class-validator";
 
 export class UpdateCategoriaProdutoDto {
     @IsString()
     @IsOptional()
-    descricao?: string;
+    subcategoria?: string;
+
+    @IsString()
+    @IsOptional()
+    categoria?: string;
+
+    @IsNumber()
+    @IsOptional()
+    dias_validade?: number;
 }

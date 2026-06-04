@@ -22,6 +22,18 @@ export class CategoriaProdutoController {
         return this.categoriaProdutoService.findAll();
     }
 
+    @Get("principais")
+    @UseGuards(JwtAuthGuard)
+    findCategoriasPrincipais() {
+        return this.categoriaProdutoService.findCategoriasPrincipais();
+    }
+
+    @Get("subcategorias/:categoria")
+    @UseGuards(JwtAuthGuard)
+    findSubcategoriasByCategoria(@Param("categoria") categoria: string) {
+        return this.categoriaProdutoService.findSubcategoriasByCategoria(categoria);
+    }
+
     @Get(":id")
     @UseGuards(JwtAuthGuard)
     findOne(@Param("id") id: string) {

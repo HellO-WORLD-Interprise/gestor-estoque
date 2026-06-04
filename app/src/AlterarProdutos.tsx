@@ -3,9 +3,11 @@ import Header from './Header';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
-interface Categoria {
+interface Subcategoria {
   id_categoria: number;
-  descricao: string;
+  subcategoria: string;
+  categoria: string;
+  dias_validade: number;
 }
 
 interface AlterarProdutosProps {
@@ -25,8 +27,11 @@ export default function AlterarProdutos({ onLogout, onNavigate, produtoId }: Alt
   const [idCategoria, setIdCategoria] = useState<number | ''>('');
   const [descricao, setDescricao] = useState('');
   
-  const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [categoriasPrincipais, setCategoriasPrincipais] = useState<string[]>([]);
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState('');
+  const [subcategorias, setSubcategorias] = useState<Subcategoria[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingSubcategorias, setLoadingSubcategorias] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -61,8 +66,8 @@ export default function AlterarProdutos({ onLogout, onNavigate, produtoId }: Alt
       setIdCategoria(produtoData.id_categoria || '');
       setDescricao(produtoData.descricao);
 
-      // Fetch das categorias
-      const categoriasResponse = await fetch(`${API_BASE_URL}/categorias`, {
+      // Fetch das categorias principais
+      const categoriasResponse = await fetch(`${API_BASE_URL}/categorias/principais`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -74,13 +79,79 @@ export default function AlterarProdutos({ onLogout, onNavigate, produtoId }: Alt
         throw new Error('Erro ao carregar categorias');
       }
 
-      const categoriasData: Categoria[] = await categoriasResponse.json();
-      setCategorias(categoriasData);
+      const categoriasData: string[] = await categoriasResponse.json();
+      setCategoriasPrincipais(categoriasData);
+
+      // Fetch da subcategoria atual do produto
+      if (produtoData.id_categoria) {
+        const subcategoriaResponse = await fetch(`${API_BASE_URL}/categorias/${produtoData.id_categoria}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (subcategoriaResponse.ok) {
+          const subcategoriaData = await subcategoriaResponse.json();
+          setCategoriaSelecionada(subcategoriaData.categoria);
+
+          // Fetch das subcategorias da categoria selecionada
+          const subResponse = await fetch(`${API_BASE_URL}/categorias/subcategorias/${subcategoriaData.categoria}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+
+          if (subResponse.ok) {
+            const subData: Subcategoria[] = await subResponse.json();
+            setSubcategorias(subData);
+          }
+        }
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao conectar com a API');
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCategoriaChange = async (categoria: string) => {
+    setCategoriaSelecionada(categoria);
+    setIdCategoria('');
+    setSubcategorias([]);
+
+    if (!categoria) {
+      return;
+    }
+
+    try {
+      setLoadingSubcategorias(true);
+      setError('');
+      const token = localStorage.getItem('access_token');
+
+      const response = await fetch(`${API_BASE_URL}/categorias/subcategorias/${categoria}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao carregar subcategorias');
+      }
+
+      const data: Subcategoria[] = await response.json();
+      setSubcategorias(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao conectar com a API');
+      console.error(err);
+    } finally {
+      setLoadingSubcategorias(false);
     }
   };
 
@@ -209,18 +280,39 @@ export default function AlterarProdutos({ onLogout, onNavigate, produtoId }: Alt
                 <div className="md:col-span-2 flex flex-col gap-2">
                   <label className="text-lg font-medium text-slate-200">Categoria</label>
                   <select
-                    value={idCategoria}
-                    onChange={(e) => setIdCategoria(e.target.value ? parseInt(e.target.value) : '')}
+                    value={categoriaSelecionada}
+                    onChange={(e) => handleCategoriaChange(e.target.value)}
                     className="w-full px-4 py-3 rounded-2xl bg-[#eef7fc] text-slate-700 outline-none cursor-pointer"
                     disabled={loading}
                   >
                     <option value="">Selecione uma categoria</option>
-                    {categorias.map((cat) => (
-                      <option key={cat.id_categoria} value={cat.id_categoria}>
-                        {cat.descricao}
+                    {categoriasPrincipais.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
                       </option>
                     ))}
                   </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="md:col-span-2 flex flex-col gap-2">
+                  <label className="text-lg font-medium text-slate-200">Subcategoria</label>
+                  <select
+                    value={idCategoria}
+                    onChange={(e) => setIdCategoria(e.target.value ? parseInt(e.target.value) : '')}
+                    className="w-full px-4 py-3 rounded-2xl bg-[#eef7fc] text-slate-700 outline-none cursor-pointer disabled:bg-slate-300 disabled:cursor-not-allowed"
+                    disabled={!categoriaSelecionada || loadingSubcategorias || loading}
+                  >
+                    <option value="">Selecione uma subcategoria</option>
+                    {subcategorias.map((sub) => (
+                      <option key={sub.id_categoria} value={sub.id_categoria}>
+                        {sub.subcategoria}
+                      </option>
+                    ))}
+                  </select>
+                  {!categoriaSelecionada && (
+                    <p className="text-sm text-slate-400">Selecione uma categoria primeiro</p>
+                  )}
                 </div>
               </div>
               <div className="flex flex-col gap-2">

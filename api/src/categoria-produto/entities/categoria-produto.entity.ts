@@ -7,5 +7,11 @@ export class CategoriaProduto {
     id_categoria: number;
 
     @Column()
-    descricao: string;
+    subcategoria: string;
+
+    @Column()
+    categoria: string;
+
+    @Column()
+    dias_validade: number;
 }

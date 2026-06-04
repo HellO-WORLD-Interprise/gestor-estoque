@@ -3,10 +3,10 @@ import { ProdutosService } from './produtos.service';
 import { ProdutosController } from './produtos.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Produto } from './entities/produto.entity';
-import { VwListagemCompleta } from './entities/vw-listagem-completa.view';
+import { VwListagemProdutos } from './entities/vw-listagem-completa.view';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Produto, VwListagemCompleta])],
+  imports: [TypeOrmModule.forFeature([Produto, VwListagemProdutos])],
   controllers: [ProdutosController],
   providers: [ProdutosService],
   exports: [ProdutosService]

@@ -4,6 +4,9 @@ import CadastrarProdutos from './CadastrarProdutos';
 import ListarProdutos from './ListarProdutos';
 import AlterarProdutos from './AlterarProdutos';
 import CadastrarUsuario from './CadastrarUsuario';
+import ListarEstoque from './ListarEstoque';
+import AlterarEstoque from './AlterarEstoque';
+import CadastrarEstoque from './CadastrarEstoque';
 const API_BASE_URL = 'http://127.0.0.1:3000';
 
 interface LoginResponse {
@@ -19,6 +22,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [produtoIdSelecionado, setProdutoIdSelecionado] = useState<number | null>(null);
+  const [estoqueIdSelecionado, setEstoqueIdSelecionado] = useState<number | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,7 +79,19 @@ export default function App() {
           setProdutoIdSelecionado(id);
           setCurrentScreen('alterarprodutos');
         }} />;
-      
+
+      case 'cadastrarestoque':
+        return <CadastrarEstoque onLogout={handleLogout} onNavigate={setCurrentScreen} />;
+
+      case 'alterarestoque': 
+        return <AlterarEstoque onLogout={handleLogout} onNavigate={setCurrentScreen} estoqueId={estoqueIdSelecionado} />;
+
+      case 'listarestoque': 
+        return <ListarEstoque onLogout={handleLogout} onNavigate={setCurrentScreen} onEditEstoque={(id) => {
+          setEstoqueIdSelecionado(id);
+          setCurrentScreen('alterarestoque');
+        }} />;
+
       default: 
         return <Dashboard onLogout={handleLogout} onNavigate={setCurrentScreen} />;
     }

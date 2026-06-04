@@ -4,6 +4,8 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 import { AuthModule } from './auth/auth.module';
 import { ProdutosModule } from './produtos/produtos.module';
 import { CategoriaProdutoModule } from './categoria-produto/categoria-produto.module';
+import { EstoqueModule } from './estoque/estoque.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 import "dotenv/config";
 
 @Module({
@@ -18,6 +20,8 @@ import "dotenv/config";
     AuthModule,
     ProdutosModule,
     CategoriaProdutoModule,
+    EstoqueModule,
+    DashboardModule,
   ],
   controllers: [],
   providers: [],

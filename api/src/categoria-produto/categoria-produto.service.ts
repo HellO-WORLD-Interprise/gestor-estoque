@@ -37,6 +37,30 @@ export class CategoriaProdutoService {
         return categoria;
     }
 
+    async findCategoriasPrincipais() {
+        const categorias = await this.categoriaProdutoRepository
+            .createQueryBuilder("ct")
+            .select("DISTINCT ct.categoria", "categoria")
+            .getRawMany();
+        
+        return categorias.map(cat => cat.categoria);
+    }
+
+    async findSubcategoriasByCategoria(categoria: string) {
+        const subcategorias = await this.categoriaProdutoRepository
+            .find({
+                where: { categoria },
+            });
+        
+        if (!subcategorias || subcategorias.length === 0) {
+            throw new NotFoundException(
+                `Nenhuma subcategoria encontrada para a categoria: ${categoria}`
+            );
+        }
+
+        return subcategorias;
+    }
+
     async update( id: number, updateCategoriaProdutoDto: UpdateCategoriaProdutoDto
     ) {
         await this.findOne(id);
